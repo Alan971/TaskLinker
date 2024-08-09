@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\ContractList;
 use App\Repository\EmployeeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,10 +33,10 @@ class Employee
     // private ?string $role = null;
 
     #[ORM\Column(length: 24)]
-    private ?string $contract = null;
+    private ?ContractList $contract = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $active = null;
+    // #[ORM\Column(nullable: true)]
+    // private ?bool $active = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $entryDate = null;
@@ -54,6 +55,10 @@ class Employee
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id) {
+        $this->id = $id;
     }
 
     public function getEmail(): ?string
@@ -116,29 +121,29 @@ class Employee
     //     return $this;
     // }
 
-    public function getContract(): ?string
+    public function getContract(): ?ContractList
     {
         return $this->contract;
     }
 
-    public function setContract(string $contract): static
+    public function setContract(ContractList $contract): static
     {
         $this->contract = $contract;
 
         return $this;
     }
 
-    public function isActive(): ?bool
-    {
-        return $this->active;
-    }
+    // public function isActive(): ?bool
+    // {
+    //     return $this->active;
+    // }
 
-    public function setActive(?bool $active): static
-    {
-        $this->active = $active;
+    // public function setActive(?bool $active): static
+    // {
+    //     $this->active = $active;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getEntryDate(): ?\DateTimeInterface
     {

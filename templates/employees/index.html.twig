@@ -33,12 +33,12 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ employee.contract }}</td>
+                            <td>{{ employee.contract.getLabel() }}</td>
                             <td>
                                 <a class="button button-edit-team" href="{{ path('app_modify_employee', {id:employee.id}) }}">
                                 Éditer
                                 </a>
-                                <a class="delete-team" href="{{ path('app_suppr_employee') }}">
+                                <a class="delete-team" href="{{ path('app_suppr_employee', {id:employee.id}) }}">
                                 Supprimer
                                 </a>
                             </td>

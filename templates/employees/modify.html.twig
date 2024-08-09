@@ -12,8 +12,10 @@
         </header>
         <div id="content">
             {{ form_start(form) }}
+                    {{ form_row(form.id) }}
+                    {{ form_row(form._token) }}
                 <div>
-                    {{ form_row(form.name, {label: 'Nom'}, {value: 'blabla'}) }}
+                    {{ form_row(form.name, {label: 'Nom'}) }}
                 </div>
                  <div>
                     {{ form_row(form.firstname, {label: 'Prenom'}) }}

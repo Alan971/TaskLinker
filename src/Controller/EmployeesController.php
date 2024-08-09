@@ -30,7 +30,8 @@ class EmployeesController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $employee->setName($form->name);
+
+            $manager->persist($employee);
             $manager->flush();
 
             return $this->redirectToRoute('app_employees');
@@ -40,7 +41,8 @@ class EmployeesController extends AbstractController
             'form' => $form,
         ]);
     }  
-    #[Route('/{/id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_suppr_employee')]
+    
+    #[Route('/suppr/{id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_suppr_employee')]
     public function supprEmployee(EntityManagerInterface $manager, Employee $employee): Response
     {
             if(isset($employee)) {
