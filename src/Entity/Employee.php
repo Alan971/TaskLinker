@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee
@@ -17,14 +18,20 @@ class Employee
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
+
+    private ?string $fullName = null;
+
 
     // #[ORM\Column(length: 255)]
     // private ?string $password = "";
@@ -32,12 +39,14 @@ class Employee
     // #[ORM\Column(length: 255)]
     // private ?string $role = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 24)]
     private ?ContractList $contract = null;
 
     // #[ORM\Column(nullable: true)]
     // private ?bool $active = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $entryDate = null;
 
@@ -47,18 +56,21 @@ class Employee
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'member')]
     private Collection $tasks;
 
+    /**
+     * @var Collection<int, Project>
+     */
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'pjAccess')]
+    private Collection $projects;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id) {
-        $this->id = $id;
     }
 
     public function getEmail(): ?string
@@ -183,6 +195,45 @@ class Employee
                 $task->setMember(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): static
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->addPjAccess($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): static
+    {
+        if ($this->projects->removeElement($project)) {
+            $project->removePjAccess($this);
+        }
+
+        return $this;
+    }
+
+    public function getfullName(): ?string
+    {
+        return $this->name . " " . $this->firstname;
+    }
+
+    public function setfullName(string $name, $firstname): static
+    {
+        $this->fullName = $name . " " . $firstname;
 
         return $this;
     }

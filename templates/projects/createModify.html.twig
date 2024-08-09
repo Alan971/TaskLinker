@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if project.name is null or project.name is empty %}
+        Nouveau projet
+    {% else %} 
+        {{ project.name }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <main>
+        <header>
+            <div id="current-user"></div>
+            <div id="title-page">
+                {% if project.name is null or project.name is empty %}
+                    <h1>Nouveau projet</h1> 
+                {% else %} 
+                    <h1>{{ project.name }} </h1>
+                {% endif %}
+            </div>
+        </header>
+        <div id="content">
+            <form name="projet" method="post">
+            {{ form_start(form) }}
+            {{ form_row(form.archive) }}
+            <div>
+                {{ form_row(form.name, { label: 'Titre du projet' }) }}
+            </div>
+            <div>
+                {{ form_row(form.pjAccess, { label: 'Inviter des membres' }) }}
+            </div>
+            <br>
+            <button class="button button-submit">Continuer</button>
+            {{ form_end(form) }}
+        </div>
+    </main>
+{% endblock %}

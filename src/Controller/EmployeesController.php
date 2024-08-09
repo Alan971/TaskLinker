@@ -46,6 +46,8 @@ class EmployeesController extends AbstractController
     public function supprEmployee(EntityManagerInterface $manager, Employee $employee): Response
     {
             if(isset($employee)) {
+                //manque a supprimer l'employer des taches
+
                 $manager->remove($employee);
                 $manager->flush();
             }
