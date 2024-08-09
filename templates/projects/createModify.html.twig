@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {% if project.name is null or project.name is empty %}
+    {% if project is null or project is empty %}
         Nouveau projet
     {% else %} 
         {{ project.name }}
@@ -13,7 +13,7 @@
         <header>
             <div id="current-user"></div>
             <div id="title-page">
-                {% if project.name is null or project.name is empty %}
+                {% if project is null or project is empty %}
                     <h1>Nouveau projet</h1> 
                 {% else %} 
                     <h1>{{ project.name }} </h1>

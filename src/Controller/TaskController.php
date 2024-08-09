@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Entity\Task;
 use App\Form\TaskType;
-use App\Repository\TaskRepository;
+use App\Enum\TaskStatus as EnumTaskStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,14 +15,25 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/task')]
 class TaskController extends AbstractController
 {
-    #[Route('/add', name: 'app_add_task', methods:['GET', 'POST'])]
-    #[Route('/modify/{id}', requirements: ['id' => '\d+'], methods:['GET', 'POST'], name: 'app_modify_task')]
-    public function addTask(Request $request, EntityManagerInterface $manager, ?Task $task): Response
+    #[Route('/add/{status}', name: 'app_add_task', methods:['GET', 'POST'])]
+    #[Route('/modify/{id, projectId}', requirements: ['id' => '\d+'], methods:['GET', 'POST'], name: 'app_modify_task')]
+    public function addTask(?string $status, ?int $projectId, Request $request, EntityManagerInterface $manager, ?Task $task, ?Project $project): Response
     {
+        $enum = new EnumTaskStatus;
+        $taskStatus = $enum->getLabel();
+
         $form = $this->createForm(TaskType::class, $task);
+        if(!isset($task)) {
+            $form->get('status')->setData(EnumTaskStatus::DONE);
+        }
+        
+        
         $form->handleRequest($request);
 
-        if($form->isValid() && $form->isValid()){
+        if($form->isSubmitted() && $form->isValid()){
+            if (!$form['project']->getData()){
+                $task->setProject($project);
+            }
             $manager->persist($task);
             $manager->flush();
 
@@ -30,6 +42,7 @@ class TaskController extends AbstractController
         
         return $this->render('task/createModify.html.twig', [
             'task' => $task,
+            'form' => $form,
         ]);
     }
 }

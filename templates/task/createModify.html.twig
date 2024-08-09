@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {% if task.title is null or task.title is empty %}
+    {% if task is null or task is empty %}
         Créer une tache
     {% else %} 
         {{ task.title }}
@@ -13,7 +13,7 @@
         <header>
             <div id="current-user"></div>
             <div id="title-page">
-                {% if task.title is null or task.title is empty %}
+                {% if task is null or task is empty %}
                     <h1>Créer une tache</h1> 
                 {% else %} 
                     <h1>{{ task.title }} </h1>
@@ -22,6 +22,7 @@
         </header>
         <div id="content">
             {{ form_start(form) }}
+            {{ form_row(form.project) }}
             <div>
                 {{ form_row(form.title, { label:'Titre de la tâche' }) }}
             </div>
@@ -37,36 +38,14 @@
                 </div>
             </div>
             <div>
-            {{ form_row(form.membre, {label:'Membre'}) }}
+            {{ form_row(form.member, {label:'Membre'}) }}
             </div>
                 <br>
                 <button class="button button-submit">Modifier</button>
             {{ form_end(form) }}
-            {% if task.title is not null or task.title is not empty %}
+            {% if task is not null or task is not empty %}
                 <a href="{ path('app_delete_task', {id:task.id})}" class="delete-task">Supprimer la tâche</a>
             {% endif %}
-
-                <label for="tache_titre" class="required">Titre de la tâche</label><input type="text" id="tache_titre" name="tache[titre]" required="required" value="Gestion des droits d&#039;accès" /></div>
-                <div><label for="tache_description">Description</label><textarea id="tache_description" name="tache[description]">Un employé ne peut accéder qu&#039;à ses projets</textarea></div>
-                <div class="flex-form">
-                    <div><label for="tache_deadline">Date</label><input type="date" id="tache_deadline" name="tache[deadline]" value="2023-09-22" /></div>
-                    <div>
-                        <label for="tache_statut" class="required">Statut</label>
-                        <select id="tache_statut" name="tache[statut]">
-                            <option value="13" selected="selected">To Do</option>
-                            <option value="14">Doing</option>
-                            <option value="15">Done</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label for="tache_employe">Membre</label>
-                    <select id="tache_employe" name="tache[employe]">
-                        <option value=""></option>
-                        <option value="13">Natalie Dillon</option>
-                        <option value="14">Demi Baker</option>
-                    </select>
-                </div>
         </div>
     </main>
 {% endblock %}

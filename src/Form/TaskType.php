@@ -8,6 +8,7 @@ use App\Enum\TaskStatus as EnumTaskStatus;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,20 +20,22 @@ class TaskType extends AbstractType
         $builder
             ->add('title')
             ->add('content', TextareaType::class, [
-                'require' => false,
+                'required' => false,
             ])
             ->add('date', null, [
                 'widget' => 'single_text',
-                'require' => false,
+                'required' => false,
             ])
             ->add('status', EnumType::class, [
-                'class' => EnumTaskStatus::class
+                'class' => EnumTaskStatus::class,
+                // 'choice_label' => ????,
             ])
             ->add('member', EntityType::class, [
                 'class' => Employee::class,
                 'choice_label' => 'fullName',
-                'require' => false,
+                'required' => false,
             ])
+            ->add ('project', HiddenType::class)
         ;
     }
 
