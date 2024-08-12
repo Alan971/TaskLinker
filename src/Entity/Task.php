@@ -34,6 +34,10 @@ class Task
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
 
+    #[ORM\Column]
+    private ?int $project_id = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +111,18 @@ class Task
     public function setProject(?Project $project): static
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getProject_id(): ?int
+    {
+        return $this->project_id;
+    }
+
+    public function setProject_id(?int $project_id): static
+    {
+        $this->project_id = $project_id;
 
         return $this;
     }

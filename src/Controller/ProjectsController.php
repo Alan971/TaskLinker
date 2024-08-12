@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\Task;
 use App\Form\ProjectType;
-use App\Repository\EmployeeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Collection;
 
 #[Route('/')]
 class ProjectsController extends AbstractController
@@ -26,15 +27,28 @@ class ProjectsController extends AbstractController
 
     #[Route('new/', methods:['GET', 'POST'], name: 'app_add_project')]
     #[Route('modify/{id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_modify_project')]
-    public function createModifyPj(Request $request, EntityManagerInterface $manager, Project $project): Response
+    public function createModifyPj(Request $request, EntityManagerInterface $manager, ?Project $project): Response
     {
         $form = $this->createForm(ProjectType::class, $project);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-        
-            $manager->persist($project);
-            $manager->flush();
+            
+            // si le projet est nouveau, alors on cree un nouvel objet
+            if(!isset($project)) {
+                $newProject = new Project;
+                $newProject->setName($form->get('name')->getData());
+                foreach ($form->get('pjAccess')->getData() as $employee) {
+                    $newProject->addPjAccess($employee);
+                }
+                $manager->persist($newProject);
+                $manager->flush();
+            }
+            else {
+                $manager->persist($project);
+                $manager->flush();
+            }
+
 
             return $this->redirectToRoute('app_projects');
         }
@@ -60,7 +74,7 @@ class ProjectsController extends AbstractController
     {
         if(isset($project)) {
             // recherche des task et mise en tableau
-            $tasks = [];
+            $tasks = $manager->getRepository(Task::class)->findByPjId($project->getId());
             // recherche des employés
             $employees = $project->getPjAccess();
             

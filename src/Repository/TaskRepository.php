@@ -16,6 +16,16 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
+    public function findByPjId($ProjectId) : ?array 
+    {
+        return $this->createQueryBuilder('t') 
+                ->where('t.project_id = :id')
+                ->setParameter('id', $ProjectId)
+                ->orderBy('t.id', 'DESC')
+                ->getQuery()
+                ->getResult()
+                ;
+    }
     //    /**
     //     * @return Task[] Returns an array of Task objects
     //     */
@@ -30,6 +40,7 @@ class TaskRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
+
 
     //    public function findOneBySomeField($value): ?Task
     //    {

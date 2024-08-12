@@ -13,16 +13,17 @@
         <header>
             <div id="current-user"></div>
             <div id="title-page">
-                {% if task is null or task is empty %}
+                {% if task.id is null or task.id is empty %}
                     <h1>Créer une tache</h1> 
                 {% else %} 
                     <h1>{{ task.title }} </h1>
                 {% endif %}
+                {{ pepe }}
             </div>
         </header>
         <div id="content">
             {{ form_start(form) }}
-            {{ form_row(form.project) }}
+            {{ form_row(form.project_id) }}
             <div>
                 {{ form_row(form.title, { label:'Titre de la tâche' }) }}
             </div>
@@ -43,7 +44,7 @@
                 <br>
                 <button class="button button-submit">Modifier</button>
             {{ form_end(form) }}
-            {% if task is not null or task is not empty %}
+            {% if task.title is not null or task.title is not empty %}
                 <a href="{ path('app_delete_task', {id:task.id})}" class="delete-task">Supprimer la tâche</a>
             {% endif %}
         </div>

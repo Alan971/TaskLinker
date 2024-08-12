@@ -26,8 +26,8 @@
                     <h2>To Do</h2>
                     <div class="tasks-list">
                         {% for task in tasks %}
-                            {% if task.status == "To Do" %}
-                                <a class="task" href="{{ path('app_view_task', {id:task.id}) }}">
+                            {% if task.status.getLabel() == "To Do" %}
+                                <a class="task" href="{{ path('app_modify_task', {id:task.id}) }}">
                                     <h3>{{ task.title }}</h3>
                                     <p>{{ task.content }}</p>
                                     <div class="task-infos">
@@ -41,7 +41,7 @@
                                 </a> 
                             {% endif %}                
                         {% endfor %}
-                        <a href="{{ path('app_add_task', {status:"To Do"}) }}" class="task-add">
+                        <a href="{{ path('app_add_task', {status:"To Do", projectId:project.id}) }}" class="task-add">
                         + Ajouter une tâche
                         </a>
                     </div>
@@ -50,8 +50,8 @@
                     <h2>Doing</h2>
                     <div class="tasks-list">
                         {% for task in tasks %}
-                            {% if task.status == "Doing" %}
-                                <a class="task" href="{{ path('app_view_task', {id:task.id}) }}">
+                            {% if task.status.getLabel() == "Doing" %}
+                                <a class="task" href="{{ path('app_modify_task', {id:task.id}) }}">
                                     <h3>{{ task.title }}</h3>
                                     <p>{{ task.content }}</p>
                                     <div class="task-infos">
@@ -65,7 +65,7 @@
                                 </a> 
                             {% endif %}                
                         {% endfor %}
-                        <a href="{{ path('app_add_task', {status:"Doing"}) }}" class="task-add">
+                        <a href="{{ path('app_add_task', {status:"Doing", projectId:project.id}) }}" class="task-add">
                         + Ajouter une tâche
                         </a>
                     </div>
@@ -74,8 +74,8 @@
                     <h2>Done</h2>
                     <div class="tasks-list">
                         {% for task in tasks %}
-                            {% if task.status == "Done" %}
-                                <a class="task" href="{{ path('app_view_task', {id:task.id}) }}">
+                            {% if task.status.getLabel() == "Done" %}
+                                <a class="task" href="{{ path('app_modify_task', {id:task.id}) }}">
                                     <h3>{{ task.title }}</h3>
                                     <p>{{ task.content }}</p>
                                     <div class="task-infos">
@@ -89,7 +89,7 @@
                                 </a> 
                             {% endif %}                
                         {% endfor %}
-                        <a href="{{ path('app_add_task', {status:"Done"}) }}" class="task-add">
+                        <a href="{{ path('app_add_task', {status:"Done", projectId:project.id}) }}" class="task-add">
                         + Ajouter une tâche
                         </a>
                     </div>

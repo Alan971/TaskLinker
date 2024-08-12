@@ -12,37 +12,65 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use function PHPUnit\Framework\isEmpty;
+
 #[Route('/task')]
 class TaskController extends AbstractController
 {
-    #[Route('/add/{status}', name: 'app_add_task', methods:['GET', 'POST'])]
-    #[Route('/modify/{id, projectId}', requirements: ['id' => '\d+'], methods:['GET', 'POST'], name: 'app_modify_task')]
+    #[Route('/add/{status}/{projectId}', requirements: ['projectId' => '\d+'], name: 'app_add_task', methods:['GET', 'POST'])]
+    #[Route('/modify/{id}', requirements: ['id' => '\d+'], methods:['GET', 'POST'], name: 'app_modify_task')]
     public function addTask(?string $status, ?int $projectId, Request $request, EntityManagerInterface $manager, ?Task $task, ?Project $project): Response
     {
-        $enum = new EnumTaskStatus;
-        $taskStatus = $enum->getLabel();
+
+        $message = "";
+        // gestion de la route add :
+        // gestion de l'affichage par défaut du select en fonction du type de tache sélectionnée
+        // récupération de l'object projet à partir de son id
+        if(isset($status) && isset($projectId)) {
+            $project = $manager->getRepository(Project::class)->findById($projectId);
+            // que se passe t'il en cas d'erreur, par exemple  id qui n'existe pas ???
+            switch ($status) {
+                case 'To Do':
+                    $status = EnumTaskStatus::TODO;
+                    break;
+                case 'Doing' :
+                    $status = EnumTaskStatus::DOING;
+                    break;
+                case 'Done' :
+                    $status = EnumTaskStatus::DONE;
+                    break;
+                default:
+                    $status = EnumTaskStatus::TODO;
+                    break;
+            }
+            $task = new Task;
+        }
 
         $form = $this->createForm(TaskType::class, $task);
-        if(!isset($task)) {
-            $form->get('status')->setData(EnumTaskStatus::DONE);
+        if(isEmpty($task)) {
+            $form->get('status')->setData($status);
+            $task->setProject_id($projectId);
+            $form->get('project_id')->setData($projectId);
+            $putois = 'le putois :';
         }
-        
-        
+
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            if (!$form['project']->getData()){
-                $task->setProject($project);
-            }
-            $manager->persist($task);
-            $manager->flush();
 
-            return $this->redirectToRoute('app_project');
+            // if(!$task->getProject_id()) {
+            //     $task->setProject_id($form->get('project_id')->getData());
+            // }
+            $manager->persist($task);
+            // $manager->flush();
+
+            return $this->redirectToRoute('app_view_project', ['id' => $task->getProject_id()]);
         }
         
         return $this->render('task/createModify.html.twig', [
             'task' => $task,
             'form' => $form,
+            'pepe' => $putois,
         ]);
     }
 }

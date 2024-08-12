@@ -35,7 +35,11 @@ class TaskType extends AbstractType
                 'choice_label' => 'fullName',
                 'required' => false,
             ])
-            ->add ('project', HiddenType::class)
+            // ->add ('project', HiddenType::class, [
+            // ])
+            ->add ('project_id', HiddenType::class, [
+                'mapped' => false,
+            ])
         ;
     }
 
