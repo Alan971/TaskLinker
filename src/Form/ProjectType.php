@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Required;
 
 class ProjectType extends AbstractType
 {
@@ -25,6 +26,7 @@ class ProjectType extends AbstractType
                 'choice_label' => 'fullName',
                 'multiple' => true,
                 'mapped' => false,
+                'required' =>false,
             ])
         ;
     }

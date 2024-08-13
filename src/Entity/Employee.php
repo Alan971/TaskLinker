@@ -32,19 +32,9 @@ class Employee
 
     private ?string $fullName = null;
 
-
-    // #[ORM\Column(length: 255)]
-    // private ?string $password = "";
-
-    // #[ORM\Column(length: 255)]
-    // private ?string $role = null;
-
     #[Assert\NotBlank()]
     #[ORM\Column(length: 24)]
     private ?ContractList $contract = null;
-
-    // #[ORM\Column(nullable: true)]
-    // private ?bool $active = null;
 
     #[Assert\NotBlank()]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
