@@ -61,6 +61,11 @@ class TaskController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
 
+            if(isEmpty($task->getProject())) {
+                $pj = new Project;
+                $pj = $manager->getRepository(Project::class)->findOneById($projectId);
+                $task->setProject($pj);
+            }
             $manager->persist($task);
             $manager->flush();
 
@@ -69,6 +74,23 @@ class TaskController extends AbstractController
         return $this->render('task/createModify.html.twig', [
             'task' => $task,
             'form' => $form,
+            'projectId' => $projectId,
         ]);
+    }
+
+    #[Route('/delete/{id}/{projectId}', requirements: ['id' => '\d+'], methods:['GET', 'POST'], name: 'app_delete_task')]
+    public function deleteTask(?int $id, ?int $projectId, EntityManagerInterface $manager, ?Task $task,) : Response 
+    {
+        if(isset($projectId) && isset($id)) {
+            $task = $manager->getRepository(Task::class)->findTaskById($id);
+            $manager->remove($task);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_view_project', ['id' => $projectId]);
+        }
+        else {
+            return $this->redirectToRoute('app_projects');
+        }
+        
     }
 }

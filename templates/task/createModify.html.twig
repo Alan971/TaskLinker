@@ -17,7 +17,6 @@
                     <h1>Créer une tache</h1> 
                 {% else %} 
                     <h1>{{ task.title }} </h1>
-                    {{ status }}
                 {% endif %}
             </div>
         </header>
@@ -46,7 +45,7 @@
             {{ form_end(form) }}
             {% if task.title is not null or task.title is not empty %}
                 <div>
-                    <a href="{ path('app_delete_task', {id:task.id})}" class="delete-task">Supprimer la tâche</a>
+                    <a href="{{ path('app_delete_task', {id:task.id, projectId:projectId})}}" class="delete-task">Supprimer la tâche</a>
                 </div>
             {% endif %}
         </div>

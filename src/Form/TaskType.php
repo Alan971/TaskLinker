@@ -36,7 +36,6 @@ class TaskType extends AbstractType
             ->add('member', EntityType::class, [
                 'class' => Employee::class,
                 'choice_label' => 'fullName',
-                'multiple' => true,
                 'required' => false,
             ])
             // ->add ('project', HiddenType::class, [
