@@ -24,78 +24,32 @@
         </header>
         <div id="content">
             <div id="tasks-container">
-                <div class="task-column">
-                    <h2>To Do</h2>
-                    <div class="tasks-list">
-                        {% for task in tasks %}
-                            {% if task.status.getLabel() == "To Do" %}
-                                <a class="task" href="{{ path('app_modify_task', {id:task.id}) }}">
-                                    <h3>{{ task.title }}</h3>
-                                    <p>{{ task.content }}</p>
-                                    <div class="task-infos">
-                                        <div class="task-deadline">
-                                            <i class="fa-regular fa-calendar"></i> {{ task.date|date('d/m/Y') }}
+                {% for taskType in status %}
+                    <div class="task-column">
+                        <h2>{{ taskType }}</h2>
+                        <div class="tasks-list">
+                            {% for task in tasks %}
+                                {% if task.status.getLabel() == taskType %}
+                                    <a class="task" href="{{ path('app_modify_task', {id:task.id}) }}">
+                                        <h3>{{ task.title }}</h3>
+                                        <p>{{ task.content }}</p>
+                                        <div class="task-infos">
+                                            <div class="task-deadline">
+                                                <i class="fa-regular fa-calendar"></i> {{ task.date|date('d/m/Y') }}
+                                            </div>
+                                            <div class="mini-user">
+                                                {{ task.member.name|slice(0,1) }} {{task.member.firstname|slice(0,1)}}
+                                            </div>
                                         </div>
-                                        <div class="mini-user">
-                                            {{ task.member.name|slice(0,1) }} {{task.member.firstname|slice(0,1)}}
-                                        </div>
-                                    </div>
-                                </a> 
-                            {% endif %}                
-                        {% endfor %}
-                        <a href="{{ path('app_add_task', {status:"To Do", projectId:project.id}) }}" class="task-add">
-                        + Ajouter une tâche
-                        </a>
+                                    </a> 
+                                {% endif %}                
+                            {% endfor %}
+                            <a href="{{ path('app_add_task', {status:"To Do", projectId:project.id}) }}" class="task-add">
+                            + Ajouter une tâche
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="task-column">
-                    <h2>Doing</h2>
-                    <div class="tasks-list">
-                        {% for task in tasks %}
-                            {% if task.status.getLabel() == "Doing" %}
-                                <a class="task" href="{{ path('app_modify_task', {id:task.id}) }}">
-                                    <h3>{{ task.title }}</h3>
-                                    <p>{{ task.content }}</p>
-                                    <div class="task-infos">
-                                        <div class="task-deadline">
-                                            <i class="fa-regular fa-calendar"></i> {{ task.date|date('d/m/Y') }}
-                                        </div>
-                                        <div class="mini-user">
-                                            {{ task.member.name|slice(0,1) }} {{task.member.firstname|slice(0,1)}}
-                                        </div>
-                                    </div>
-                                </a> 
-                            {% endif %}                
-                        {% endfor %}
-                        <a href="{{ path('app_add_task', {status:"Doing", projectId:project.id}) }}" class="task-add">
-                        + Ajouter une tâche
-                        </a>
-                    </div>
-                </div>
-                <div class="task-column">
-                    <h2>Done</h2>
-                    <div class="tasks-list">
-                        {% for task in tasks %}
-                            {% if task.status.getLabel() == "Done" %}
-                                <a class="task" href="{{ path('app_modify_task', {id:task.id}) }}">
-                                    <h3>{{ task.title }}</h3>
-                                    <p>{{ task.content }}</p>
-                                    <div class="task-infos">
-                                        <div class="task-deadline">
-                                            <i class="fa-regular fa-calendar"></i> {{ task.date|date('d/M/Y') }}
-                                        </div>
-                                        <div class="mini-user">
-                                            {{ task.member.name|slice(0,1) }} {{task.member.firstname|slice(0,1)}}
-                                        </div>
-                                    </div>
-                                </a> 
-                            {% endif %}                
-                        {% endfor %}
-                        <a href="{{ path('app_add_task', {status:"Done", projectId:project.id}) }}" class="task-add">
-                        + Ajouter une tâche
-                        </a>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </main>
