@@ -42,12 +42,11 @@
             </div>
                 <br>
                 <button class="button button-submit">Modifier</button>
-            {{ form_end(form) }}
             {% if task.title is not null or task.title is not empty %}
-                <div>
-                    <a href="{{ path('app_delete_task', {id:task.id, projectId:projectId})}}" class="delete-task">Supprimer la tâche</a>
-                </div>
+                <a href="{{ path('app_delete_task', {id:task.id, projectId:projectId})}}" class="delete-task">Supprimer la tâche</a>
             {% endif %}
+            {{ form_end(form) }}
+
         </div>
     </main>
 {% endblock %}
