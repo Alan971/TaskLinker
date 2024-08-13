@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Entity\Task;
+use App\Enum\TaskStatus as EnumTaskStatus;
 use App\Form\ProjectType;
 use Doctrine\Common\Collections\Collection as CollectionsCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 #[Route('/')]
 class ProjectsController extends AbstractController
 {
+
     #[Route('', name: 'app_projects')]
     public function index(EntityManagerInterface $manager): Response
     {
@@ -28,8 +30,8 @@ class ProjectsController extends AbstractController
         ]);
     }
 
-    #[Route('new/', methods:['GET', 'POST'], name: 'app_add_project')]
-    #[Route('modify/{id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_modify_project')]
+    #[Route('new/', methods:['GET', 'POST'], name: 'app_projects_add')]
+    #[Route('modify/{id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_projects_modify')]
     public function createModifyPj(?int $id, Request $request, EntityManagerInterface $manager, ?Project $project): Response
     {
         $form = $this->createForm(ProjectType::class, $project);
@@ -61,7 +63,7 @@ class ProjectsController extends AbstractController
         ]);
     }
 
-    #[Route('archive/{id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_archive_project')]
+    #[Route('archive/{id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_projects_archive')]
     public function archivePj(EntityManagerInterface $manager, Project $project): Response
     {
         if(isset($project)) {
@@ -72,7 +74,7 @@ class ProjectsController extends AbstractController
         return $this->redirectToRoute('app_projects');
     }
 
-    #[Route('view/{id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_view_project')]
+    #[Route('view/{id}', requirements:['id' => '\d+'], methods:['GET', 'POST'], name: 'app_projects_view')]
     public function viewPj(EntityManagerInterface $manager, ?Project $project): Response
     {
         if(isset($project)) {
@@ -85,6 +87,7 @@ class ProjectsController extends AbstractController
                 'project' => $project,
                 'tasks' => $tasks,
                 'employees' => $employees,
+                'status' => array_map(fn($case) => $case->value , EnumTaskStatus::cases()),
             ]);
 
         }

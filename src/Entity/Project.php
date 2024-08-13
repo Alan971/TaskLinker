@@ -79,6 +79,13 @@ class Project
         return $this->pjAccess;
     }
 
+    public function setPjAccess(Collection $pjAccess): static
+    {
+        $this->pjAccess = $pjAccess;
+        return $this;
+    }
+       
+
     public function addPjAccess(Employee $pjAccess): static
     {
         if (!$this->pjAccess->contains($pjAccess)) {

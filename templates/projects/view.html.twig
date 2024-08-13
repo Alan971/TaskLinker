@@ -6,6 +6,8 @@
 
 {% block body %}
     <main>
+    {# how to dump values in twig #}
+    {# {{ dump(status) }} #}
         <header>
             <div id="current-user"></div>
             <div id="title-page">
@@ -16,7 +18,7 @@
                             <div class="avatar">{{ employee.name|slice(0,1) }} {{ employee.firstname|slice(0,1) }}</div>
                         {% endfor %}
                     </div>
-                    <a class="button" href="{{path('app_modify_project', {id:project.id})}}">Modifier</a>
+                    <a class="button" href="{{path('app_projects_modify', {id:project.id})}}">Modifier</a>
                 </div>
             </div>
         </header>
@@ -32,7 +34,7 @@
                                     <p>{{ task.content }}</p>
                                     <div class="task-infos">
                                         <div class="task-deadline">
-                                            <i class="fa-regular fa-calendar"></i> {{ task.date|date('d/M/Y') }}
+                                            <i class="fa-regular fa-calendar"></i> {{ task.date|date('d/m/Y') }}
                                         </div>
                                         <div class="mini-user">
                                             {{ task.member.name|slice(0,1) }} {{task.member.firstname|slice(0,1)}}
@@ -56,7 +58,7 @@
                                     <p>{{ task.content }}</p>
                                     <div class="task-infos">
                                         <div class="task-deadline">
-                                            <i class="fa-regular fa-calendar"></i> {{ task.date|date('d/M/Y') }}
+                                            <i class="fa-regular fa-calendar"></i> {{ task.date|date('d/m/Y') }}
                                         </div>
                                         <div class="mini-user">
                                             {{ task.member.name|slice(0,1) }} {{task.member.firstname|slice(0,1)}}

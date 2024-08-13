@@ -69,7 +69,7 @@ class TaskController extends AbstractController
             $manager->persist($task);
             $manager->flush();
 
-            return $this->redirectToRoute('app_view_project', ['id' => $projectId]);
+            return $this->redirectToRoute('app_projects_view', ['id' => $projectId]);
         }
         return $this->render('task/createModify.html.twig', [
             'task' => $task,
@@ -86,7 +86,7 @@ class TaskController extends AbstractController
             $manager->remove($task);
             $manager->flush();
 
-            return $this->redirectToRoute('app_view_project', ['id' => $projectId]);
+            return $this->redirectToRoute('app_projects_view', ['id' => $projectId]);
         }
         else {
             return $this->redirectToRoute('app_projects');
