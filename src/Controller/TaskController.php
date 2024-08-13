@@ -51,18 +51,17 @@ class TaskController extends AbstractController
             $form->get('status')->setData($status);
             $task->setProject_id($projectId);
             $form->get('project_id')->setData($projectId);
-            $putois = 'le putois :';
         }
 
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
 
-            // if(!$task->getProject_id()) {
-            //     $task->setProject_id($form->get('project_id')->getData());
-            // }
+            if(!$task->getProject_id()) {
+                $task->setProject_id($form->get('project_id')->getData());
+            }
             $manager->persist($task);
-            // $manager->flush();
+            $manager->flush();
 
             return $this->redirectToRoute('app_view_project', ['id' => $task->getProject_id()]);
         }
@@ -70,7 +69,6 @@ class TaskController extends AbstractController
         return $this->render('task/createModify.html.twig', [
             'task' => $task,
             'form' => $form,
-            'pepe' => $putois,
         ]);
     }
 }

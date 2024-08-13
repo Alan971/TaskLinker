@@ -27,8 +27,10 @@ class TaskType extends AbstractType
                 'required' => false,
             ])
             ->add('status', EnumType::class, [
-                'class' => EnumTaskStatus::class,
-                // 'choice_label' => ????,
+                'class' => EnumTaskStatus::class, 
+                'choice_label' => static function (\UnitEnum $choice): string {
+                    return $choice->value;
+                },
             ])
             ->add('member', EntityType::class, [
                 'class' => Employee::class,
