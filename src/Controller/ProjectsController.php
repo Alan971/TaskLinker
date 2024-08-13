@@ -48,15 +48,6 @@ class ProjectsController extends AbstractController
                 $manager->flush();
             }
             else {
-                // si le projet n'est pas nouveau, on supprime toutes les relations de la base employée_projet
-                
-                $oldProject = new Project;
-                $oldProject = $manager->getRepository(Project::class)->findById($id);
-                $employees = $oldProject->getPjAccess();
-                foreach($employees as $employee) {
-                    $project->removePjAccess($employee);
-                }
-                // avant de remettre les nouvelles
                 $manager->persist($project);
                 $manager->flush();
             }

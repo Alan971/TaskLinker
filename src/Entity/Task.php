@@ -4,8 +4,11 @@ namespace App\Entity;
 
 use App\Enum\TaskStatus;
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -14,7 +17,8 @@ class Task
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
@@ -28,15 +32,18 @@ class Task
     private ?TaskStatus $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?Employee $member = null;
-
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
 
-    #[ORM\Column]
-    private ?int $project_id = null;
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Employee $member = null;
 
+
+
+    public function __construct()
+    {
+        
+    }
 
     public function getId(): ?int
     {
@@ -91,18 +98,6 @@ class Task
         return $this;
     }
 
-    public function getMember(): ?employee
-    {
-        return $this->member;
-    }
-
-    public function setMember(?employee $member): static
-    {
-        $this->member = $member;
-
-        return $this;
-    }
-
     public function getProject(): ?Project
     {
         return $this->project;
@@ -115,15 +110,17 @@ class Task
         return $this;
     }
 
-    public function getProject_id(): ?int
+    public function getMember(): ?Employee
     {
-        return $this->project_id;
+        return $this->member;
     }
 
-    public function setProject_id(?int $project_id): static
+    public function setMember(?Employee $member): static
     {
-        $this->project_id = $project_id;
+        $this->member = $member;
 
         return $this;
     }
+
+
 }

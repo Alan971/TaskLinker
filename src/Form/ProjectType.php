@@ -25,7 +25,7 @@ class ProjectType extends AbstractType
                 'class' => Employee::class,
                 'choice_label' => 'fullName',
                 'multiple' => true,
-                'mapped' => false,
+                //'mapped' => false,
                 'required' =>false,
             ])
         ;

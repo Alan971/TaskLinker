@@ -19,16 +19,14 @@ class TaskController extends AbstractController
 {
     #[Route('/add/{status}/{projectId}', requirements: ['projectId' => '\d+'], name: 'app_add_task', methods:['GET', 'POST'])]
     #[Route('/modify/{id}', requirements: ['id' => '\d+'], methods:['GET', 'POST'], name: 'app_modify_task')]
-    public function addTask(?string $status, ?int $projectId, Request $request, EntityManagerInterface $manager, ?Task $task, ?Project $project): Response
+    public function addTask(?int $id, ?string $status, ?int $projectId, Request $request, EntityManagerInterface $manager, ?Task $task, ?Project $project): Response
     {
 
-        $message = "";
         // gestion de la route add :
         // gestion de l'affichage par défaut du select en fonction du type de tache sélectionnée
         // récupération de l'object projet à partir de son id
         if(isset($status) && isset($projectId)) {
             $project = $manager->getRepository(Project::class)->findById($projectId);
-            // que se passe t'il en cas d'erreur, par exemple  id qui n'existe pas ???
             switch ($status) {
                 case 'To Do':
                     $status = EnumTaskStatus::TODO;
@@ -45,11 +43,17 @@ class TaskController extends AbstractController
             }
             $task = new Task;
         }
+        // chemin modify
+        // si ProjectId n'est pas récupéré dans le chemin c'est que c'est une tache déjà existante
+        // on récupère alors l'Id du projet
+        if (!$projectId){
+            $project = $task->getProject();
+            $projectId = $project->getId();
+        }
 
         $form = $this->createForm(TaskType::class, $task);
         if(isEmpty($task)) {
             $form->get('status')->setData($status);
-            $task->setProject_id($projectId);
             $form->get('project_id')->setData($projectId);
         }
 
@@ -57,15 +61,11 @@ class TaskController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
 
-            if(!$task->getProject_id()) {
-                $task->setProject_id($form->get('project_id')->getData());
-            }
             $manager->persist($task);
             $manager->flush();
 
-            return $this->redirectToRoute('app_view_project', ['id' => $task->getProject_id()]);
+            return $this->redirectToRoute('app_view_project', ['id' => $projectId]);
         }
-        
         return $this->render('task/createModify.html.twig', [
             'task' => $task,
             'form' => $form,

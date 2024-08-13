@@ -19,13 +19,14 @@ class TaskRepository extends ServiceEntityRepository
     public function findByPjId($ProjectId) : ?array 
     {
         return $this->createQueryBuilder('t') 
-                ->where('t.project_id = :id')
+                ->where('t.project = :id')
                 ->setParameter('id', $ProjectId)
                 ->orderBy('t.id', 'DESC')
                 ->getQuery()
                 ->getResult()
                 ;
     }
+
     //    /**
     //     * @return Task[] Returns an array of Task objects
     //     */

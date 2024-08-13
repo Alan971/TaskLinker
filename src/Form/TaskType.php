@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Employee;
+use App\Entity\Project;
 use App\Entity\Task;
 use App\Enum\TaskStatus as EnumTaskStatus;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -35,9 +36,11 @@ class TaskType extends AbstractType
             ->add('member', EntityType::class, [
                 'class' => Employee::class,
                 'choice_label' => 'fullName',
+                'multiple' => true,
                 'required' => false,
             ])
             // ->add ('project', HiddenType::class, [
+            //     'class' => Project::class,
             // ])
             ->add ('project_id', HiddenType::class, [
                 'mapped' => false,

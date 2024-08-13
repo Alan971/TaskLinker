@@ -40,11 +40,6 @@ class Employee
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $entryDate = null;
 
-    /**
-     * @var Collection<int, Task>
-     */
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'member')]
-    private Collection $tasks;
 
     /**
      * @var Collection<int, Project>
@@ -52,10 +47,19 @@ class Employee
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'pjAccess')]
     private Collection $projects;
 
+    /**
+     * @var Collection<int, Task>
+     */
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'member')]
+    private Collection $tasks;
+
+
+
     public function __construct()
     {
-        $this->tasks = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -99,30 +103,6 @@ class Employee
         return $this;
     }
 
-    // public function getPassword(): ?string
-    // {
-    //     return $this->password;
-    // }
-
-    // public function setPassword(string $password): static
-    // {
-    //     $this->password = $password;
-
-    //     return $this;
-    // }
-
-    // public function getRole(): ?string
-    // {
-    //     return $this->role;
-    // }
-
-    // public function setRole(string $role): static
-    // {
-    //     $this->role = $role;
-
-    //     return $this;
-    // }
-
     public function getContract(): ?ContractList
     {
         return $this->contract;
@@ -135,18 +115,6 @@ class Employee
         return $this;
     }
 
-    // public function isActive(): ?bool
-    // {
-    //     return $this->active;
-    // }
-
-    // public function setActive(?bool $active): static
-    // {
-    //     $this->active = $active;
-
-    //     return $this;
-    // }
-
     public function getEntryDate(): ?\DateTimeInterface
     {
         return $this->entryDate;
@@ -155,36 +123,6 @@ class Employee
     public function setEntryDate(?\DateTimeInterface $entryDate): static
     {
         $this->entryDate = $entryDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Task>
-     */
-    public function getTasks(): Collection
-    {
-        return $this->tasks;
-    }
-
-    public function addTask(Task $task): static
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
-            $task->setMember($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTask(Task $task): static
-    {
-        if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
-            if ($task->getMember() === $this) {
-                $task->setMember(null);
-            }
-        }
 
         return $this;
     }
@@ -227,4 +165,35 @@ class Employee
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): static
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): static
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getMember() === $this) {
+                $task->setMember(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
